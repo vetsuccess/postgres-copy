@@ -89,7 +89,8 @@ module PostgresCopy
                            null = options.key?(:null) ? "NULL '#{options[:null]}'" : nil
                            force_null = options.key?(:force_null) ? "FORCE_NULL(#{options[:force_null].join(',')})" : nil
                            delimiter = options[:format] == :tsv ? "E'\t'" : "'#{options[:delimiter]}'"
-                           "WITH (" + ["DELIMITER #{delimiter}", "QUOTE '#{quote}'", null, force_null, "FORMAT CSV"].compact.join(', ') + ")"
+                           escape = options[:escape] ? "ESCAPE '#{options[:escape]}'" : nil
+                           "WITH (" + ["DELIMITER #{delimiter}", "QUOTE '#{quote}'", escape, null, force_null, "FORMAT CSV"].compact.join(', ') + ")"
                          end
         io = path_or_io.instance_of?(String) ? File.open(path_or_io, get_file_mode('r', options[:encoding])) : path_or_io
 
